@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Промежуточные итоги</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #f3f0e8;
+      --bg-deep: #e8e3d6;
+      --ink: #1a2e28;
+      --ink-soft: #4a5e56;
+      --accent: #1f6b57;
+      --accent-soft: #d4e8e0;
+      --line: #c9c2b2;
+      --card: #faf8f3;
+      --danger: #a33a2f;
+      --warn: #8b5a2b;
+      --ok: #1f6b57;
+      --radius: 4px;
+      --font-display: "Instrument Serif", Georgia, serif;
+      --font-body: "IBM Plex Sans", system-ui, sans-serif;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: var(--font-body);
+      background: var(--bg);
+      color: var(--ink);
+      min-height: 100vh;
+      line-height: 1.5;
+    }
+
+    .frame-label {
+      position: fixed;
+      top: 12px;
+      left: 16px;
+      z-index: 100;
+      font-size: 11px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--ink-soft);
+      background: var(--card);
+      border: 1px solid var(--line);
+      padding: 4px 10px;
+    }
+
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 24px 48px;
+      border-bottom: 1px solid var(--line);
+      background: var(--card);
+    }
+
+    .logo {
+      font-family: var(--font-display);
+      font-size: 24px;
+      color: var(--accent);
+    }
+    .logo span { color: var(--ink); font-style: italic; }
+
+    nav {
+      display: flex;
+      gap: 28px;
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--ink-soft);
+    }
+    nav a {
+      color: inherit;
+      text-decoration: none;
+      border-bottom: 2px solid transparent;
+      padding-bottom: 2px;
+    }
+    nav a.active {
+      color: var(--ink);
+      border-bottom-color: var(--accent);
+    }
+
+    .status-bar {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px 48px 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .status-bar h1 {
+      font-family: var(--font-display);
+      font-size: 28px;
+      font-weight: 400;
+    }
+
+    .progress {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--ink-soft);
+    }
+
+    .progress .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--accent);
+      animation: pulse 1.4s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.35; }
+    }
+
+    .pipeline {
+      max-width: 1200px;
+      margin: 16px auto 0;
+      padding: 0 48px;
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 8px;
+    }
+
+    .pipe-step {
+      padding: 10px 12px;
+      background: var(--bg-deep);
+      border-radius: var(--radius);
+      font-size: 11px;
+      border-left: 3px solid var(--line);
+    }
+
+    .pipe-step.done {
+      border-left-color: var(--accent);
+      background: var(--accent-soft);
+    }
+
+    .pipe-step.current {
+      border-left-color: var(--warn);
+      background: #f5ead8;
+    }
+
+    .pipe-step .t {
+      font-weight: 600;
+      display: block;
+      margin-bottom: 2px;
+      font-size: 12px;
+    }
+
+    main {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 28px 48px 56px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 20px;
+    }
+
+    .card.wide { grid-column: 1 / -1; }
+
+    .card-head {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      margin-bottom: 16px;
+    }
+
+    .card-head h2 {
+      font-family: var(--font-display);
+      font-size: 20px;
+      font-weight: 400;
+    }
+
+    .card-head .tag {
+      font-size: 11px;
+      color: var(--ink-soft);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    /* Metrics strip */
+    .metrics {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+    }
+
+    .metric {
+      padding: 14px;
+      background: var(--bg-deep);
+      border-radius: var(--radius);
+    }
+
+    .metric .val {
+      font-family: var(--font-display);
+      font-size: 28px;
+      line-height: 1;
+      margin-bottom: 4px;
+    }
+
+    .metric .lbl {
+      font-size: 12px;
+      color: var(--ink-soft);
+    }
+
+    /* Loss / accuracy chart (CSS mock) */
+    .chart {
+      height: 200px;
+      display: flex;
+      align-items: flex-end;
+      gap: 3px;
+      padding: 8px 0 0;
+      border-bottom: 1px solid var(--line);
+      position: relative;
+    }
+
+    .chart-legend {
+      display: flex;
+      gap: 16px;
+      margin-top: 10px;
+      font-size: 12px;
+      color: var(--ink-soft);
+    }
+
+    .chart-legend i {
+      display: inline-block;
+      width: 12px;
+      height: 3px;
+      margin-right: 6px;
+      vertical-align: middle;
+    }
+
+    .bar {
+      flex: 1;
+      border-radius: 2px 2px 0 0;
+      background: var(--accent);
+      opacity: 0.85;
+      position: relative;
+    }
+
+    .line-overlay {
+      position: absolute;
+      inset: 8px 0 0 0;
+      pointer-events: none;
+    }
+
+    .line-overlay svg { width: 100%; height: 100%; }
+
+    /* Confusion matrix */
+    .matrix-wrap {
+      display: grid;
+      grid-template-columns: 40px 1fr;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .y-label {
+      writing-mode: vertical-rl;
+      transform: rotate(180deg);
+      font-size: 11px;
+      color: var(--ink-soft);
+      text-align: center;
+    }
+
+    .matrix {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 4px;
+    }
+
+    .cell {
+      aspect-ratio: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      font-weight: 600;
+      border-radius: 2px;
+      color: var(--ink);
+    }
+
+    .axis-x {
+      grid-column: 2;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 4px;
+      margin-top: 6px;
+      font-size: 11px;
+      color: var(--ink-soft);
+      text-align: center;
+    }
+
+    .axis-title {
+      grid-column: 2;
+      text-align: center;
+      font-size: 11px;
+      color: var(--ink-soft);
+      margin-top: 4px;
+    }
+
+    /* CWT placeholder */
+    .cwt {
+      height: 180px;
+      border-radius: var(--radius);
+      background:
+        linear-gradient(180deg,
+          #1a3a4a 0%,
+          #1f6b57 18%,
+          #c4a35a 38%,
+          #a33a2f 55%,
+          #2a4a5c 72%,
+          #1a2e28 100%);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .cwt::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        repeating-linear-gradient(
+          90deg,
+          transparent 0,
+          transparent 18px,
+          rgba(255,255,255,0.04) 18px,
+          rgba(255,255,255,0.04) 19px
+        ),
+        repeating-linear-gradient(
+          0deg,
+          transparent 0,
+          transparent 14px,
+          rgba(0,0,0,0.08) 14px,
+          rgba(0,0,0,0.08) 15px
+        );
+    }
+
+    .cwt-meta {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 10px;
+      font-size: 12px;
+      color: var(--ink-soft);
+    }
+
+    /* K-mer histogram */
+    .hist {
+      height: 160px;
+      display: flex;
+      align-items: flex-end;
+      gap: 2px;
+    }
+
+    .hist .h {
+      flex: 1;
+      background: var(--accent);
+      border-radius: 1px 1px 0 0;
+      opacity: 0.7;
+    }
+
+    .hist .h:nth-child(3n) { opacity: 0.45; height: 40% !important; }
+    .hist .h:nth-child(5n) { opacity: 0.9; }
+
+    .dist-row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+      margin-top: 4px;
+    }
+
+    .dist-item {
+      text-align: center;
+      padding: 10px 6px;
+      background: var(--bg-deep);
+      border-radius: var(--radius);
+    }
+
+    .dist-item .n {
+      font-family: var(--font-display);
+      font-size: 22px;
+    }
+
+    .dist-item .c {
+      font-size: 11px;
+      color: var(--ink-soft);
+    }
+
+    .footer-actions {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 48px 48px;
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+    }
+
+    .btn {
+      font-family: inherit;
+      font-size: 14px;
+      font-weight: 600;
+      padding: 11px 20px;
+      border: none;
+      border-radius: var(--radius);
+      background: var(--accent);
+      color: #fff;
+      cursor: pointer;
+      text-decoration: none;
+    }
+
+    .btn-ghost {
+      font-family: inherit;
+      font-size: 14px;
+      font-weight: 500;
+      padding: 10px 18px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--card);
+      color: var(--ink-soft);
+      cursor: pointer;
+      text-decoration: none;
+    }
+
+    @media (max-width: 900px) {
+      main, .status-bar, .pipeline, .footer-actions, header {
+        padding-left: 24px;
+        padding-right: 24px;
+      }
+      main { grid-template-columns: 1fr; }
+      .pipeline { grid-template-columns: 1fr 1fr; }
+      .metrics { grid-template-columns: 1fr 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <nav>
+      <a href="mockup-01-welcome.html">Загрузка</a>
+      <a href="mockup-02-intermediate.html" class="active">Анализ</a>
+      <a href="mockup-03-results.html">Результаты</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="card wide">
+      <div class="card-head">
+        <h2>Сводные метрики</h2>
+      </div>
+      <div class="metrics">
+        <div class="metric">
+          <div class="val">0.87</div>
+          <div class="lbl">Accuracy</div>
+        </div>
+        <div class="metric">
+          <div class="val">0.31</div>
+          <div class="lbl">Loss (валид.)</div>
+        </div>
+        <div class="metric">
+          <div class="val">560</div>
+          <div class="lbl">Образцов (баланс)</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="card">
+      <div class="card-head">
+        <h2>Loss и Accuracy</h2>
+        <span class="tag">50 эпох</span>
+      </div>
+      <div class="chart">
+        <div class="bar" style="height:78%"></div>
+        <div class="bar" style="height:62%"></div>
+        <div class="bar" style="height:55%"></div>
+        <div class="bar" style="height:48%"></div>
+        <div class="bar" style="height:44%"></div>
+        <div class="bar" style="height:40%"></div>
+        <div class="bar" style="height:36%"></div>
+        <div class="bar" style="height:34%"></div>
+        <div class="bar" style="height:32%"></div>
+        <div class="bar" style="height:30%"></div>
+        <div class="bar" style="height:28%"></div>
+        <div class="bar" style="height:27%"></div>
+        <div class="bar" style="height:26%"></div>
+        <div class="bar" style="height:25%"></div>
+        <div class="bar" style="height:24%"></div>
+        <div class="bar" style="height:24%"></div>
+        <div class="line-overlay">
+          <svg viewBox="0 0 100 100" preserveAspectRatio="none">
+            <polyline
+              fill="none"
+              stroke="#8b5a2b"
+              stroke-width="1.5"
+              points="0,72 7,58 14,48 21,40 28,34 35,30 42,26 49,22 56,20 63,18 70,16 77,15 84,14 91,13 100,12"
+            />
+          </svg>
+        </div>
+      </div>
+      <div class="chart-legend">
+        <span><i style="background:#1f6b57"></i>Train Loss</span>
+        <span><i style="background:#8b5a2b"></i>Val Accuracy</span>
+      </div>
+    </section>
+
+    <section class="card">
+      <div class="card-head">
+        <h2>Матрица ошибок</h2>
+        <span class="tag">Классы 0–3</span>
+      </div>
+      <div class="matrix-wrap">
+        <div class="y-label">Истинный класс</div>
+        <div class="matrix">
+          <div class="cell" style="background:#1f6b57;color:#fff">32</div>
+          <div class="cell" style="background:#a8cfc2">3</div>
+          <div class="cell" style="background:#e8e3d6">1</div>
+          <div class="cell" style="background:#f0ede4">0</div>
+
+          <div class="cell" style="background:#c5ddd4">4</div>
+          <div class="cell" style="background:#1f6b57;color:#fff">28</div>
+          <div class="cell" style="background:#a8cfc2">3</div>
+          <div class="cell" style="background:#e8e3d6">1</div>
+
+          <div class="cell" style="background:#e8e3d6">1</div>
+          <div class="cell" style="background:#c5ddd4">2</div>
+          <div class="cell" style="background:#1f6b57;color:#fff">33</div>
+          <div class="cell" style="background:#a8cfc2">2</div>
+
+          <div class="cell" style="background:#f0ede4">0</div>
+          <div class="cell" style="background:#e8e3d6">1</div>
+          <div class="cell" style="background:#c5ddd4">3</div>
+          <div class="cell" style="background:#1f6b57;color:#fff">26</div>
+        </div>
+        <div class="axis-x">
+          <span>0</span><span>1</span><span>2</span><span>3</span>
+        </div>
+        <div class="axis-title">Предсказанный класс</div>
+      </div>
+    </section>
+
+    <section class="card">
+      <div class="card-head">
+        <h2>CWT-изображение</h2></div>
+        <span class="tag">Образец #142</span>
+      </div>
+      <div class="cwt" title="Continuous Wavelet Transform"></div>
+      <div class="cwt-meta">
+        <span>Вейвлет: Morlet · шкала → частота</span>
+        <span>SNP-позиция →</span>
+      </div>
+    </section>
+
+    <section class="card">
+      <div class="card-head">
+        <h2>Распределение k-меров</h2>
+        <span class="tag">Топ частоты</span>
+      </div>
+      <div class="hist">
+        <div class="h" style="height:45%"></div>
+        <div class="h" style="height:70%"></div>
+        <div class="h" style="height:55%"></div>
+        <div class="h" style="height:90%"></div>
+        <div class="h" style="height:40%"></div>
+        <div class="h" style="height:65%"></div>
+        <div class="h" style="height:80%"></div>
+        <div class="h" style="height:35%"></div>
+        <div class="h" style="height:50%"></div>
+        <div class="h" style="height:75%"></div>
+        <div class="h" style="height:60%"></div>
+        <div class="h" style="height:85%"></div>
+        <div class="h" style="height:42%"></div>
+        <div class="h" style="height:68%"></div>
+        <div class="h" style="height:52%"></div>
+        <div class="h" style="height:95%"></div>
+        <div class="h" style="height:38%"></div>
+        <div class="h" style="height:72%"></div>
+        <div class="h" style="height:48%"></div>
+        <div class="h" style="height:88%"></div>
+      </div>
+      <div class="cwt-meta">
+        <span>Уникальных 6-меров в батче</span>
+        <span>Частота →</span>
+      </div>
+    </section>
+
+    <section class="card wide">
+      <div class="card-head">
+        <h2>Баланс классов после аугментации</h2>
+        <span class="tag">Исходно 90 / 113 / 140 / 64 → цель 140</span>
+      </div>
+      <div class="dist-row">
+        <div class="dist-item">
+          <div class="n">140</div>
+          <div class="c">Класс 0 — восприимчивый</div>
+        </div>
+        <div class="dist-item">
+          <div class="n">140</div>
+          <div class="c">Класс 1 — слабая уст.</div>
+        </div>
+        <div class="dist-item">
+          <div class="n">140</div>
+          <div class="c">Класс 2 — средняя уст.</div>
+        </div>
+        <div class="dist-item">
+          <div class="n">140</div>
+          <div class="c">Класс 3 — устойчивый</div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <div class="footer-actions">
+    <a class="btn-ghost" href="mockup-01-welcome.html">← Назад</a>
+    <a class="btn" href="mockup-03-results.html">К итоговым результатам →</a>
+  </div>
+</body>
+</html>

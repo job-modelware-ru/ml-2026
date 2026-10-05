@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Приветственная страница</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #f3f0e8;
+      --bg-deep: #e8e3d6;
+      --ink: #1a2e28;
+      --ink-soft: #4a5e56;
+      --accent: #1f6b57;
+      --accent-hover: #175545;
+      --accent-soft: #d4e8e0;
+      --line: #c9c2b2;
+      --card: #faf8f3;
+      --warn: #8b5a2b;
+      --radius: 4px;
+      --font-display: "Instrument Serif", Georgia, serif;
+      --font-body: "IBM Plex Sans", system-ui, sans-serif;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: var(--font-body);
+      background:
+        radial-gradient(ellipse 80% 50% at 10% -10%, #d5ebe2 0%, transparent 55%),
+        radial-gradient(ellipse 60% 40% at 100% 0%, #e4ddd0 0%, transparent 45%),
+        var(--bg);
+      color: var(--ink);
+      min-height: 100vh;
+      line-height: 1.5;
+    }
+
+    /* Figma-like frame chrome */
+    .frame-label {
+      position: fixed;
+      top: 12px;
+      left: 16px;
+      z-index: 100;
+      font-size: 11px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--ink-soft);
+      background: var(--card);
+      border: 1px solid var(--line);
+      padding: 4px 10px;
+    }
+
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 28px 48px 0;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .logo {
+      font-family: var(--font-display);
+      font-size: 28px;
+      letter-spacing: -0.02em;
+      color: var(--accent);
+    }
+
+    .logo span { color: var(--ink); font-style: italic; }
+
+    nav {
+      display: flex;
+      gap: 28px;
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--ink-soft);
+    }
+
+    nav a {
+      color: inherit;
+      text-decoration: none;
+      border-bottom: 2px solid transparent;
+      padding-bottom: 2px;
+    }
+
+    nav a.active {
+      color: var(--ink);
+      border-bottom-color: var(--accent);
+    }
+
+    main {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 40px 48px 64px;
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 48px;
+      align-items: start;
+    }
+
+    .hero h1 {
+      font-family: var(--font-display);
+      font-size: clamp(36px, 4.5vw, 52px);
+      font-weight: 400;
+      line-height: 1.12;
+      letter-spacing: -0.02em;
+      margin-bottom: 20px;
+    }
+
+    .hero h1 em {
+      font-style: italic;
+      color: var(--accent);
+    }
+
+    .hero .lead {
+      font-size: 16px;
+      color: var(--ink-soft);
+      max-width: 480px;
+      margin-bottom: 28px;
+    }
+
+    .meta-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 36px;
+    }
+
+    .chip {
+      font-size: 12px;
+      font-weight: 500;
+      padding: 6px 12px;
+      border: 1px solid var(--line);
+      background: var(--card);
+      color: var(--ink-soft);
+      border-radius: var(--radius);
+    }
+
+    .chip.accent {
+      background: var(--accent-soft);
+      border-color: #a8cfc2;
+      color: var(--accent);
+    }
+
+    .about {
+      border-top: 1px solid var(--line);
+      padding-top: 28px;
+    }
+
+    .about h2 {
+      font-family: var(--font-display);
+      font-size: 22px;
+      font-weight: 400;
+      margin-bottom: 14px;
+    }
+
+    .about p {
+      font-size: 14px;
+      color: var(--ink-soft);
+      margin-bottom: 12px;
+      max-width: 520px;
+    }
+
+    .steps {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-top: 24px;
+    }
+
+    .step {
+      padding: 14px;
+      background: var(--bg-deep);
+      border-radius: var(--radius);
+    }
+
+    .step .num {
+      font-family: var(--font-display);
+      font-size: 20px;
+      color: var(--accent);
+      margin-bottom: 6px;
+    }
+
+    .step .title {
+      font-size: 13px;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    .step .desc {
+      font-size: 12px;
+      color: var(--ink-soft);
+    }
+
+    /* Upload panel */
+    .panel {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 28px;
+      position: sticky;
+      top: 24px;
+    }
+
+    .panel h2 {
+      font-family: var(--font-display);
+      font-size: 24px;
+      font-weight: 400;
+      margin-bottom: 6px;
+    }
+
+    .panel .sub {
+      font-size: 13px;
+      color: var(--ink-soft);
+      margin-bottom: 24px;
+    }
+
+    .upload-zone {
+      border: 1.5px dashed #a8b5ae;
+      background: #f0ede4;
+      border-radius: var(--radius);
+      padding: 22px 18px;
+      text-align: center;
+      margin-bottom: 14px;
+      cursor: pointer;
+      transition: border-color 0.15s, background 0.15s;
+    }
+
+    .upload-zone:hover,
+    .upload-zone.filled {
+      border-color: var(--accent);
+      background: var(--accent-soft);
+    }
+
+    .upload-zone .label {
+      font-size: 13px;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    .upload-zone .hint {
+      font-size: 12px;
+      color: var(--ink-soft);
+    }
+
+    .upload-zone .file-name {
+      display: none;
+      font-size: 12px;
+      color: var(--accent);
+      font-weight: 500;
+      margin-top: 8px;
+    }
+
+    .upload-zone.filled .file-name { display: block; }
+    .upload-zone.filled .hint { display: none; }
+
+    .params {
+      margin: 22px 0 24px;
+      padding-top: 18px;
+      border-top: 1px solid var(--line);
+    }
+
+    .params h3 {
+      font-size: 13px;
+      font-weight: 600;
+      margin-bottom: 14px;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--ink-soft);
+    }
+
+    .field {
+      margin-bottom: 12px;
+    }
+
+    .field label {
+      display: block;
+      font-size: 12px;
+      font-weight: 500;
+      margin-bottom: 4px;
+    }
+
+    .field select,
+    .field input {
+      width: 100%;
+      font-family: inherit;
+      font-size: 13px;
+      padding: 8px 10px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #fff;
+      color: var(--ink);
+    }
+
+    .row-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .btn {
+      display: block;
+      width: 100%;
+      font-family: inherit;
+      font-size: 14px;
+      font-weight: 600;
+      padding: 12px 16px;
+      border: none;
+      border-radius: var(--radius);
+      background: var(--accent);
+      color: #fff;
+      cursor: pointer;
+      text-align: center;
+      text-decoration: none;
+    }
+
+    .btn:hover { background: var(--accent-hover); }
+
+    .btn-ghost {
+      display: block;
+      width: 100%;
+      margin-top: 8px;
+      font-family: inherit;
+      font-size: 13px;
+      font-weight: 500;
+      padding: 10px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: transparent;
+      color: var(--ink-soft);
+      cursor: pointer;
+      text-align: center;
+      text-decoration: none;
+    }
+
+    .note {
+      margin-top: 14px;
+      font-size: 11px;
+      color: var(--warn);
+      line-height: 1.4;
+    }
+
+    @media (max-width: 860px) {
+      main {
+        grid-template-columns: 1fr;
+        padding: 28px 24px 48px;
+      }
+      header { padding: 20px 24px 0; }
+      .panel { position: static; }
+      .steps { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <nav>
+      <a href="mockup-01-welcome.html" class="active">Загрузка</a>
+      <a href="mockup-02-intermediate.html">Анализ</a>
+      <a href="mockup-03-results.html">Результаты</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero">
+      <h1>Связь фенотипа<br />и <em>генотипа</em></h1>
+      <p class="lead">
+        Веб-приложение для анализа геномных SNP-данных и предсказания
+        устойчивости к аскохитозу.
+      </p>
+
+
+      <div class="about">
+        <h2>О проекте</h2>
+        <p>
+          Система принимает CSV с генотипом и фенотипом, выполняет кодирование SNP,
+          k-мерную токенизацию и генерацию вейвлет-изображений, затем запускает
+          модель <em>GenomicTransformerEncoder</em>.
+        </p>
+        <p>
+          Результат - классификация образцов по уровням устойчивости (0–3)
+          и ранжирование генов, наиболее связанных с выбранным фенотипом.
+        </p>
+
+        <div class="steps">
+          <div class="step">
+            <div class="num">01</div>
+            <div class="title">Загрузка</div>
+            <div class="desc">CSV генотипа и фенотипа</div>
+          </div>
+          <div class="step">
+            <div class="num">02</div>
+            <div class="title">Обработка</div>
+            <div class="desc">SNP → k-меры → CWT</div>
+          </div>
+          <div class="step">
+            <div class="num">03</div>
+            <div class="title">Инференс</div>
+            <div class="desc">Метрики и топ генов</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <aside class="panel">
+      <h2>Загрузка данных</h2>
+      <p class="sub">Формат CSV · фильтрация маркеров с префиксом «Ca»</p>
+
+      <div class="upload-zone" id="geno" onclick="this.classList.toggle('filled')">
+        <div class="label">Файл генотипа</div>
+        <div class="hint">Перетащите .csv или нажмите для выбора</div>
+        <div class="file-name">total_df_for_aio_chickpea_…_synchro.csv</div>
+      </div>
+
+      <div class="upload-zone" id="pheno" onclick="this.classList.toggle('filled')">
+        <div class="label">Файл фенотипа</div>
+        <div class="hint">Перетащите .csv или нажмите для выбора</div>
+        <div class="file-name">phenotype_ascochyta_scores.csv</div>
+      </div>
+
+
+
+      <a class="btn" href="mockup-02-intermediate.html">Запустить анализ</a>
+      <a class="btn-ghost" href="#">Скачать пример данных</a>
+      <p class="note">Ожидаемый объём: ~6642 SNP → 1107 токенов. Балансировка классов до 140 образцов.</p>
+    </aside>
+  </main>
+</body>
+</html>
